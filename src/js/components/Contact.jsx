@@ -1,16 +1,32 @@
-import React from "react";
+import React,{Fragment} from "react";
 import {connect} from 'react-redux';
+import Modal from './Modal'
 
- const Contact =  ({students,deleteData}) => {
- 	console.log('these are the student',students)
- 	const data = students.data.length ? students.data.map((item)=>(
+ const Contact =  ({students,deleteData,setEditIndex,editIndex,closeModal,handleChange,show,name,fahterName,address,updateData}) => {
+ 	const data = students.data.length ? students.data.map((item,i)=>(
  		<tr key={item._id}>
 			<td>{item.name}</td>
 			<td>{item.fatherName}</td>
 			<td>{item.address}</td>
 			<td><i onClick={()=>deleteData(item._id)} className="fa fa-trash" /></td>
+			<td><i className="fa fa-pencil" onClick={()=>setEditIndex(i)} /></td>
+			<Fragment>
+			{
+				editIndex == i && 
+				<Modal
+					closeModal={closeModal}
+					name={item.name}
+					fatherName={item.fatherName}
+					address={item.address}
+					id={item.id}
+					show={editIndex==i}
+					handleChange={handleChange}
+					updateData={updateData}
+				 />
+			}
+			</Fragment>
 		</tr>
- 	)):''
+ 	)):null
 	 return (
 		<div className="hero">
 			<div className="container">
@@ -30,6 +46,7 @@ import {connect} from 'react-redux';
 					</tbody>
 				</table>
 			</div>
+
 		</div>
 	);
 }

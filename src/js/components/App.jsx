@@ -9,12 +9,15 @@ import Contact from './Contact';
 import Footer from './Footer'
 import * as actions from '../actions';
 
+
 class App extends React.Component{
 
 	state = {
 		name:'',
 		fatherName:'',
-		address:''
+		address:'',
+		editIndex:null,
+		show:false
 	}
 
 	handleChange = e=>{
@@ -41,14 +44,49 @@ class App extends React.Component{
 	deleteData = id=>{
 		this.props.deleteData(id)
 	}
+	showModal= ()=>{
+		this.setState({
+			show:true
+		})
+	}
+	closeModal=()=>{
+		this.setState({
+			editIndex:null
+		})
+	}
+	setEditIndex = i=>{
+		this.setState({
+			editIndex:i
+		})
+	}
+
+	updateData = (id,data)=>{
+		this.props.updateData(id,data)
+	}
+
 	render(){
+		console.log('this is the state in app',this.state)
 		return(
 			<div className='new'>
 				<Menu />
 				<div style={{height:'80vh'}}>
 					<Switch>
 						<Route exact path= '/' component={Home} />
-						<Route exact path= '/contact' render = {routeProps=><Contact deleteData={this.deleteData} />} />
+						<Route exact path= '/contact' render = {routeProps=>
+							<Contact
+							 deleteData={this.deleteData}
+							 show={this.state.show}
+							 showModal={this.state.showModal}
+							 closeModal={this.closeModal}
+							 handleChange={this.handleChange}
+							 editIndex={this.state.editIndex}
+							 setEditIndex={this.setEditIndex}
+							 updateData={this.updateData}
+							 name={this.state.name}
+							 fatherName={this.state.fatherName}
+							 address={this.state.address}	
+							  />
+							} />
 						<Route exact path= '/services' 
 							render = {routeProps=> <Services 
 								submitData={this.submitData}
@@ -65,7 +103,7 @@ class App extends React.Component{
 	}
 }
 
-export default withRouter(connect(null,{getData:actions.getData,submitData:actions.submitData,deleteData:actions.deleteData})(App));
+export default withRouter(connect(null,{getData:actions.getData,submitData:actions.submitData,deleteData:actions.deleteData,updateData:actions.updateData})(App));
 
 
 

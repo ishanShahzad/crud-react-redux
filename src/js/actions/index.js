@@ -46,3 +46,17 @@ export function deleteData(id){
 	}
 }
 
+export function updateData (id,data){
+	return dispatch=>{
+		dispatch({type:types.UPDATE_DATA_ATTEMPT})
+		try{
+			axios.post(`/student/${id}`)
+			.then(data=>{
+				dispatch({type:types.UPDATE_DATA_SUCCESS,payload:res.data})
+			})
+		}catch(e){
+			dispatch({type:types.UPDATE_DATA_FAIL,payload:e})
+		}
+	}
+}
+
